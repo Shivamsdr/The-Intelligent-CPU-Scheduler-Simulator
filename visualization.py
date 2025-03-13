@@ -1,5 +1,4 @@
 import matplotlib.pyplot as plt
-
 def draw_gantt_chart(processes):
     """Draw Gantt Chart for Process Execution Timeline"""
     start_times = [p['start_time'] for p in processes]
@@ -18,6 +17,23 @@ def draw_gantt_chart(processes):
     plt.xlabel('Time')
     plt.title('Gantt Chart')
     plt.grid(axis='x', linestyle='--', alpha=0.7)
+    plt.tight_layout()
+    plt.show()
+def draw_gantt_chart_p(processes):
+    """Draw Gantt Chart for Process Execution Timeline"""
+    plt.figure(figsize=(10, 5))
+
+    for process in processes:
+        for segment in process['segments']:
+            start_time, end_time = segment
+            plt.barh(f"P{process['id']}", end_time - start_time, left=start_time, edgecolor='black', color='skyblue')
+            mid_point = start_time + (end_time - start_time) / 2
+            plt.text(mid_point, f"P{process['id']}", f"P{process['id']}", ha='center', va='center', color='black', fontsize=10, fontweight='bold')
+
+    plt.xlabel('Time')
+    plt.title('Gantt Chart')
+    plt.grid(axis='x', linestyle='--', alpha=0.7)
+    plt.xlim(left=0)
     plt.tight_layout()
     plt.show()
 
