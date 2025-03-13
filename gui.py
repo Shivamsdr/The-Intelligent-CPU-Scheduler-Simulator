@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter import messagebox
-from algorithms import fcfs, sjf, round_robin, priority_scheduling
+from algorithms import fcfs, sjf, round_robin, priority_scheduling, srtf, priority_scheduling_p
 from visualization import draw_gantt_chart, calculate_metrics
 
 process_list = []
@@ -43,6 +43,8 @@ def run_simulation(selected_algo):
         result = round_robin(process_list, quantum=2)
     elif selected_algo == "Priority":
         result = priority_scheduling(process_list)
+        elif selected_algo == "SRTF":
+        result = srtf(process_list)
     else:
         messagebox.showerror("Invalid Algorithm", "Please select a valid scheduling algorithm.")
         return
@@ -54,7 +56,7 @@ def run_gui():
     """Run the GUI"""
     root = tk.Tk()
     root.title("CPU Scheduler Simulator")
-    root.geometry("800x600")
+    root.geometry("400x650")
     root.configure(bg="#f0f0f0")
 
     # Title
@@ -62,32 +64,32 @@ def run_gui():
 
     # Input Section
     input_frame = tk.Frame(root, bg="#f0f0f0")
-    input_frame.pack(pady=10)
+    input_frame.pack(pady=10,anchor="w")
 
-    tk.Label(input_frame, text="Process ID:", bg="#f0f0f0").grid(row=0, column=0, padx=10, pady=5, sticky="e")
+    tk.Label(input_frame, text="Process ID:", bg="#f0f0f0").grid(row=0, column=0, padx=10, pady=5, sticky="w")
     entry_pid = tk.Entry(input_frame)
-    entry_pid.grid(row=0, column=1, padx=10, pady=5)
+    entry_pid.grid(row=0, column=1, padx=10, pady=5, sticky="w")
 
-    tk.Label(input_frame, text="Arrival Time:", bg="#f0f0f0").grid(row=1, column=0, padx=10, pady=5, sticky="e")
+    tk.Label(input_frame, text="Arrival Time:", bg="#f0f0f0").grid(row=1, column=0, padx=10, pady=5, sticky="w")
     entry_arrival = tk.Entry(input_frame)
-    entry_arrival.grid(row=1, column=1, padx=10, pady=5)
+    entry_arrival.grid(row=1, column=1, padx=10, pady=5, sticky="w")
 
-    tk.Label(input_frame, text="Burst Time:", bg="#f0f0f0").grid(row=2, column=0, padx=10, pady=5, sticky="e")
+    tk.Label(input_frame, text="Burst Time:", bg="#f0f0f0").grid(row=2, column=0, padx=10, pady=5, sticky="w")
     entry_burst = tk.Entry(input_frame)
-    entry_burst.grid(row=2, column=1, padx=10, pady=5)
+    entry_burst.grid(row=2, column=1, padx=10, pady=5, sticky="w")
 
-    tk.Label(input_frame, text="Priority (optional):", bg="#f0f0f0").grid(row=3, column=0, padx=10, pady=5, sticky="e")
+    tk.Label(input_frame, text="Priority:", bg="#f0f0f0").grid(row=3, column=0, padx=10, pady=5, sticky="w")
     entry_priority = tk.Entry(input_frame)
-    entry_priority.grid(row=3, column=1, padx=10, pady=5)
+    entry_priority.grid(row=3, column=1, padx=10, pady=5, sticky="w")
 
     # Process List
     listbox = tk.Listbox(root, width=60, height=10, selectbackground="#cce7ff")
     listbox.pack(pady=10)
 
     # Algorithm Selection
-    tk.Label(root, text="Select Scheduling Algorithm:", bg="#f0f0f0").pack()
-    algo_var = tk.StringVar(value="FCFS")
-    tk.OptionMenu(root, algo_var, "FCFS", "SJF", "Round Robin", "Priority").pack(pady=5)
+    tk.Label(root, bg="#f0f0f0").pack()
+    algo_var = tk.StringVar(value="Select Scheduling Algorithm:")
+    tk.OptionMenu(root, algo_var, "FCFS", "SJF", "SRTF", "Round Robin", "Priority").pack(pady=5)
 
     # Buttons
     tk.Button(root, text="Add Process", command=lambda: add_process(entry_pid, entry_arrival, entry_burst, entry_priority, listbox), bg="#4CAF50", fg="white", padx=10, pady=5).pack(pady=10)
