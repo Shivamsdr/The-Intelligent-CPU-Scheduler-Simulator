@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter import messagebox
 from algorithms import fcfs, sjf, round_robin, priority_scheduling, srtf
-from visualization import draw_gantt_chart, calculate_metrics
+from visualization import draw_gantt_chart, draw_gantt_chart_p, calculate_metrics
 
 process_list = []
 
@@ -47,22 +47,27 @@ def run_simulation(selected_algo):
     if not process_list:
         messagebox.showwarning("Zero Processes", "Add at least one process")
         return
-
+    p=0 #preemptive flag
     if selected_algo == "FCFS":
         result = fcfs(process_list)
     elif selected_algo == "SJF":
         result = sjf(process_list)
     elif selected_algo == "Round Robin":
         result = round_robin(process_list, quantum=2)
+        p=1
     elif selected_algo == "Priority":
         result = priority_scheduling(process_list)
     elif selected_algo == "SRTF":
         result = srtf(process_list)
+        p=1
     else:
         messagebox.showerror("Invalid Algorithm is selected", "Please select a valid scheduling algorithm")
         return
 
-    draw_gantt_chart(result)
+    if(p):
+        draw_gantt_chart_p(result)
+    else:
+        draw_gantt_chart(result)
     calculate_metrics(result)
 
 #Quality of LIFE gui (*wink*)
