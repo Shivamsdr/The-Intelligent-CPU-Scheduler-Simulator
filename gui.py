@@ -21,9 +21,9 @@ def add_process(entry_pid, entry_arrival, entry_burst, entry_priority, listbox):
             messagebox.showerror("Invalid Input", "Process ID cannot be empty!")
             return
 
-        process_list.append({"id": pid, "arrival_time": arrival_time, "burst_time": burst_time, "priority": priority})
-        listbox.insert(tk.END, f"   Process {pid} - Arrival: {arrival_time}, Burst: {burst_time}, Priority: {priority}")
-
+        process_list.append({"id": pid, "arrival_time": arrival_time, "burst_time": burst_time, "priority": priority,"initial_burst_time": burst_time})
+        #listbox.insert(tk.END, f"   Process {pid} - Arrival: {arrival_time}, Burst: {burst_time}, Priority: {priority}")
+        listbox.insert(tk.END, f"       P{pid}     -     {arrival_time}        {burst_time}        {priority}")
         # Clear input fields after adding
         entry_pid.delete(0, tk.END)
         entry_arrival.delete(0, tk.END)
@@ -38,7 +38,7 @@ def remove_process(listbox):
     try:
         selected_index = listbox.curselection()[0]
         listbox.delete(selected_index)
-        del process_list[selected_index]
+        del process_list[selected_index - 1]  # Adjust index to account for header
     except IndexError:
         messagebox.showerror("Selection Error", "Please select a process to remove.")
         
@@ -118,6 +118,7 @@ def run_gui():
     # Process List
     listbox = tk.Listbox(root, width=60, height=10, selectbackground="#cce7ff")
     listbox.pack(pady=10)
+    listbox.insert(tk.END, f"  Process ID  Arrival  Burst  Priority  ")
 
     # Algorithm Selection
     tk.Label(root, bg="#f0f0f0").pack()
