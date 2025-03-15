@@ -1,8 +1,8 @@
 # The Intelligent CPU Scheduler Simulator
-#### A practical CPU scheduling simulation tool with real-time visualization with heuristic suggestions for algorithm and planned AI/ML enhancements and prediction models.
+A practical CPU scheduling simulation tool with real-time visualization with heuristic suggestions for algorithm and planned AI/ML enhancements and prediction models.
 
 ## Overview
-#### This project is a CPU scheduling simulator that helps visualize and analyze different scheduling algorithms. It currently supports:
+This project is a CPU scheduling simulator that helps visualize and analyze different scheduling algorithms. It currently supports:
 
 ### Implemented:
 Process Scheduling using following algorithms
@@ -55,9 +55,9 @@ pip install -r requirements.txt
 python3 main.py
 ```
  
-### Contributions
-**Shivam Yadav** https://github.com/Shivamsdr
-**Om Singh Chauhan** https://github.com/OmSingh2005
-**Aryan Kumar** https://github.com/AryanKumarLpu
+### Contributors
+**Shivam Yadav** https://github.com/Shivamsdr  
+**Om Singh Chauhan** https://github.com/OmSingh2005  
+**Aryan Kumar** https://github.com/AryanKumarLpu  
 
 Feel free to suggest improvements, report issues, or contribute to this project. If you have ideas for adding AI/ML-based, let’s collaborate
