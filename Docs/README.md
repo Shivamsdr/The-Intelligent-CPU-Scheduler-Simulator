@@ -1,107 +1,63 @@
-1. Project Overview
-The Intelligent CPU Scheduler Simulator aims to provide an interactive and visual tool for understanding and analyzing CPU scheduling algorithms. Users can input process details such as arrival time, burst time, and priority, and the simulator will generate real-time visualizations of scheduling decisions, including Gantt charts and performance metrics (waiting time, turnaround time, response time).
+# The Intelligent CPU Scheduler Simulator
+#### A practical CPU scheduling simulation tool with real-time visualization with heuristic suggestions for algorithm and planned AI/ML enhancements and prediction models.
 
-Expected Outcomes
-Interactive Simulator: Users can test different scheduling algorithms.
-Visual Representation: Real-time Gantt charts and performance metrics.
-Comparative Analysis: Users can compare different algorithms based on efficiency.
-User-Friendly GUI: Easy-to-use interface for adding/modifying processes.
-Scope
-Supports FCFS, SJF, Round Robin, and Priority Scheduling.
-Real-time process execution simulation.
-Performance metrics calculation.
-Graphical visualization of scheduling behavior.
-2. Module-Wise Breakdown
-To implement the simulator efficiently, we divide it into three main modules:
+## Overview
+#### This project is a CPU scheduling simulator that helps visualize and analyze different scheduling algorithms. It currently supports:
 
-Module 1: Graphical User Interface (GUI)
-Purpose: Provide an interface for users to input process details and view scheduling results.
+### Implemented:
+Process Scheduling using following algorithms
+1. First Come First Serve (FCFS)  
+2. Shortest Job First (SJF)
+3. Round Robin (RR)
+4. Priority Scheduling (non preemptive)
+5. Shortest Remaining Time First (SRTF)  
 
-Roles:
+### Planned Enhancements:
++ Priority Scheduling (Preemptive)  
++ Adding AI/ML-based heuristics for dynamic scheduling (or suggestions to the user)  
++ Advanced performance comparison metrics than existings ones  
++ More interactive GUI features for user-friendly simulations  
 
-Accept user input (arrival time, burst time, priority, quantum for RR).
-Display results dynamically using graphs and tables.
-Allow algorithm selection and comparison.
-Example Features:
+### Features
++ Gantt Chart Visualization (Both preemptive and non-preemptive)  
++ Multiple Scheduling Algorithms (fcfs,sjf,srtf,rr,priority)  
++ Performance Metrics (Avg. Waiting Time, Turnaround Time, Response Times)  
++ Testing Programs for Algorithms (For large Sample data testing)  
 
-Input Panel: Text fields for process data.
-Start Simulation Button: Triggers scheduling execution.
-Algorithm Selector: Dropdown menu to choose an algorithm.
-Gantt Chart Display: Visual representation of process execution.
-Module 2: Scheduling Algorithms Processing
-Purpose: Implement CPU scheduling algorithms to compute process execution sequences.
+### Project Structure
+```
+/src  
+  |--- algorithms.py      # Scheduling algorithms  
+  |--- gui.py             # GUI implementation 
+  |--- visualization.py   # Visualization 
+  |--- main.py            # Entry point  
+/tests  
+  |--- test_rr.py         # Round Robin test
+  |--- test_srtf.py       # SRTF test
+  |--- test.xlsx          # DataSet for tests
+/docs  
+  |--- README.md          # Documentation  
+  |--- requirements.txt   # Required Libraries
+```
+### How to Run
 
-Roles:
+1. Clone the repository:
+```
+git clone https://github.com/Shivamsdr/The-Intelligent-CPU-Scheduler-Simulator.git  
+cd The-Intelligent-CPU-Scheduler-Simulator
+```
+2. Install dependencies
+```
+pip install -r requirements.txt
+```
+3. Run the simulator:
+```
+python3 main.py
+```
+ 
+### Contributions
+**Shivam Yadav** https://github.com/Shivamsdr
+**Om Singh Chauhan** https://github.com/OmSingh2005
+**Aryan Kumar** https://github.com/AryanKumarLpu
 
-Compute process scheduling order based on selected algorithm.
-Calculate metrics such as waiting time, turnaround time, and response time.
-Example Features:
-
-First Come First Serve (FCFS): Execute processes in order of arrival.
-Shortest Job First (SJF): Execute the shortest process first.
-Round Robin (RR): Implement time slicing.
-Priority Scheduling: Execute processes based on priority.
-Module 3: Data Visualization & Analytics
-Purpose: Generate graphical output for Gantt charts and performance metrics.
-
-Roles:
-
-Visualize Gantt charts using libraries like Matplotlib.
-Display comparative bar charts for waiting time and turnaround time.
-Enable real-time animations of the scheduling process.
-Example Features:
-
-Gantt Chart Representation: Show execution order.
-Bar Chart for Performance Metrics: Compare algorithms.
-Table View: Show numerical data for easy analysis.
-3. Functionalities
-Key Features per Module:
-✅ GUI:
-
-User-friendly interface for input and visualization.
-Dropdown for algorithm selection.
-Process table with editable fields.
-✅ Scheduling Algorithms:
-
-Implementation of FCFS, SJF, RR, and Priority Scheduling.
-Dynamic execution of processes.
-Calculation of waiting time, turnaround time, response time.
-✅ Data Visualization:
-
-Gantt Charts: Real-time visualization of scheduling.
-Performance Metrics Table: Display of computed values.
-Comparison Graphs: Average waiting time across algorithms.
-4. Technology Recommendations
-Programming Language:
-Python (Simple, good for GUI and visualization)
-Java (Good for desktop applications)
-JavaScript (React/Node.js) (For a web-based approach)
-Libraries & Tools:
-Functionality	Recommended Library/Tool
-GUI (Desktop)	Tkinter, PyQt, JavaFX
-GUI (Web)	React.js, Flask/Django (Backend)
-Scheduling Algorithms	Python (Core logic), Java (Threading)
-Data Visualization	Matplotlib, Seaborn, Plotly
-Gantt Chart Drawing	Matplotlib, Plotly
-5. Execution Plan
-Step 1: Setup the Development Environment
-Install Python/Java.
-Install required libraries:
-bash
-Copy
-Edit
-pip install matplotlib seaborn numpy tkinter
-Step 2: Design the GUI
-Create input fields for process ID, arrival time, burst time, priority.
-Implement buttons for "Add Process", "Run Algorithm", and "Reset".
-Develop a dropdown menu for selecting scheduling algorithms.
-Step 3: Implement Scheduling Algorithms
-Implement FCFS, SJF, RR, Priority Scheduling functions.
-Create a function to compute waiting time & turnaround time.
-Step 4: Integrate Data Visualization
-Use Matplotlib to create Gantt charts dynamically.
-Generate bar charts for performance metrics.
-Step 5: Testing and Optimization
-Test with different process sets.
-Optimize UI responsiveness.
-Improve visualization clarity.
+Feel free to suggest improvements, report issues, or contribute to this project. If you have ideas for adding AI/ML-based, let’s collaborate
