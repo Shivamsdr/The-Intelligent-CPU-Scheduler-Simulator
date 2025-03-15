@@ -80,7 +80,6 @@ def srtf(processes):
 
     return processes
 
-
 def round_robin(processes, quantum):
     #Round Robin Scheduling
     n = len(processes)
@@ -134,9 +133,115 @@ def round_robin(processes, quantum):
 
     return result
 
-def priority_scheduling():
-    pass
-    #abstract for now
-def priority_scheduling_p():
-    pass
-    #abstract for now
+def priority_scheduling(processes):
+    """Priority Scheduling"""
+    processes.sort(key=lambda x: (x['priority'], x['arrival_time']))
+    current_time = 0
+
+    for process in processes:
+        if current_time < process['arrival_time']:
+            current_time = process['arrival_time']
+
+        process['start_time'] = current_time
+        process['completion_time'] = current_time + process['burst_time']
+        process['turnaround_time'] = process['completion_time'] - process['arrival_time']
+        process['waiting_time'] = process['turnaround_time'] - process['burst_time']
+
+        current_time = process['completion_time']
+
+    return processes
+
+import time
+processes = [
+    {"id": 1, "arrival_time": 0, "burst_time": 5, "priority": 1, "initial_burst_time": 5},
+    {"id": 2, "arrival_time": 1, "burst_time": 4, "priority": 2, "initial_burst_time": 4},
+    {"id": 3, "arrival_time": 2, "burst_time": 2, "priority": 3, "initial_burst_time": 2},
+    {"id": 4, "arrival_time": 3, "burst_time": 3, "priority": 4, "initial_burst_time": 3},
+    {"id": 5, "arrival_time": 4, "burst_time": 1, "priority": 5, "initial_burst_time": 1}
+]
+if __name__ == "__main__":
+    # Measure the time taken for round robin scheduling
+    start_time = time.time()
+    result = round_robin(processes, quantum=2)
+    end_time = time.time()
+    print(f"Round Robin scheduling took {end_time - start_time:.2f} seconds.")
+    result = fcfs(processes)
+    print(f"FCFS scheduling took {end_time - start_time:.2f} seconds.")
+    result = sjf(processes)
+    print(f"SJF scheduling took {end_time - start_time:.2f} seconds.")
+    result = srtf(processes)
+    print(f"SRTF scheduling took {end_time - start_time:.2f} seconds.")
+    result = priority_scheduling(processes)
+    print(f"Priority scheduling took {end_time - start_time:.2f} seconds.")
+
+
+'''
+#faster using deque
+from collections import deque
+def round_robin(processes, quantum):
+    # Round Robin Scheduling
+    n = len(processes)
+    burst_remaining = [p['burst_time'] for p in processes]
+    current_time = 0
+    completed = 0
+    queue = deque()  # Using deque for efficient pops from the front and appends to the back
+    result = []
+
+    # Initialize processes
+    for process in processes:
+        process['waiting_time'] = 0
+        process['start_time'] = -1  # Initialize start time
+        process['segments'] = []
+
+    while completed != n:
+        # Add newly arrived processes to the queue
+        for i in range(n):
+            if processes[i]['arrival_time'] <= current_time and burst_remaining[i] > 0 and processes[i] not in queue:
+                queue.append(processes[i])
+
+        if queue:
+            current_process = queue.popleft()  # Pop the process from the front of the queue
+            idx = processes.index(current_process)
+
+            if current_process['start_time'] == -1:
+                current_process['start_time'] = current_time  # Set start time
+
+            if burst_remaining[idx] > quantum:
+                # Add a new time segment for the process
+                if not current_process['segments'] or current_process['segments'][-1][1] != current_time:
+                    current_process['segments'].append([current_time, current_time + quantum])
+                else:
+                    current_process['segments'][-1][1] = current_time + quantum
+
+                current_time += quantum
+                burst_remaining[idx] -= quantum
+
+                # Recheck processes and add newly arrived ones to the queue
+                for i in range(n):
+                    if processes[i]['arrival_time'] <= current_time and burst_remaining[i] > 0 and processes[i] not in queue:
+                        queue.append(processes[i])
+
+                # Re-add the current process to the queue if it’s not finished
+                if burst_remaining[idx] > 0:
+                    queue.append(current_process)
+
+            else:
+                # Process completes
+                if not current_process['segments'] or current_process['segments'][-1][1] != current_time:
+                    current_process['segments'].append([current_time, current_time + burst_remaining[idx]])
+                else:
+                    current_process['segments'][-1][1] = current_time + burst_remaining[idx]
+
+                current_time += burst_remaining[idx]
+                burst_remaining[idx] = 0
+                completed += 1
+                current_process['completion_time'] = current_time
+                current_process['turnaround_time'] = current_process['completion_time'] - current_process['arrival_time']
+                current_process['waiting_time'] = current_process['turnaround_time'] - current_process['initial_burst_time']
+                result.append(current_process)
+        else:
+            current_time += 1  # Idle time if no process is ready to run
+
+    return result
+
+'''

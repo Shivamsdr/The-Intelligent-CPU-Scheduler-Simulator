@@ -2,10 +2,10 @@ import tkinter as tk
 from tkinter import messagebox
 from algorithms import fcfs, sjf, round_robin, priority_scheduling, srtf
 from visualization import draw_gantt_chart, draw_gantt_chart_p, calculate_metrics
-
+from suggest_algorithm import suggest_algorithm
 process_list = []
 
-def add_process(entry_pid, entry_arrival, entry_burst, entry_priority, listbox):
+def add_process(entry_pid, entry_arrival, entry_burst, entry_priority, listbox, algo_label,algo_var):
 #Add a process to the list
     try:
         pid = entry_pid.get().strip()
@@ -30,18 +30,33 @@ def add_process(entry_pid, entry_arrival, entry_burst, entry_priority, listbox):
         entry_burst.delete(0, tk.END)
         entry_priority.delete(0, tk.END)
 
+        #suggestion
+        suggested_algo = suggest_algorithm(process_list)
+        algo_label.config(text=f"Suggested Algorithm: {suggested_algo}")
+        # suggested algorithm in the dropdown
+        algo_var.set(suggested_algo)
+
+
     except ValueError:
         messagebox.showerror("Invalid Input", "Please enter valid only numeric values for Arrival time, Burst time, and Priority.")
 
-def remove_process(listbox):
+def remove_process(listbox,algo_label,algo_var):
     #Remove the selected process from the list
     try:
         selected_index = listbox.curselection()[0]
         listbox.delete(selected_index)
         del process_list[selected_index - 1]  # Adjust index to account for header
+        if process_list:  # If there are still processes left
+            suggested_algo = suggest_algorithm(process_list)
+            algo_label.config(text=f"Suggested Algorithm: {suggested_algo}")
+            algo_var.set(suggested_algo)  # Update the dropdown menu
+        else:  # If no processes are left
+            algo_label.config(text="Suggested Algorithm: None")
+            algo_var.set("Select Scheduling Algorithm:")
+
     except IndexError:
         messagebox.showerror("Selection Error", "Please select a process to remove.")
-        
+
 def run_simulation(selected_algo):
     #Run the selected scheduling algorithm
     if not process_list:
@@ -93,7 +108,7 @@ def run_gui():
     """Run the GUI"""
     root = tk.Tk()
     root.title("CPU Scheduler Simulator")
-    root.geometry("480x660") #adjusts width for vertical rectagle
+    root.geometry("480x690") #adjusts width for vertical rectagle
     root.configure(bg="#f0f0f0")
 
     # Title
@@ -120,6 +135,10 @@ def run_gui():
     entry_priority.grid(row=3, column=1, padx=10, pady=5, sticky="w")
     add_placeholder(entry_priority, "optional")
 
+    # Suggested Algorithm Label
+    algo_label = tk.Label(root, text="Suggested Algorithm: None", font=("MS Serif", 16), bg="#f0f0f0", fg="darkgreen")
+    algo_label.pack(pady=10)
+
     # Process List
     listbox = tk.Listbox(root, width=60, height=10, selectbackground="#cce7ff")
     listbox.pack(pady=10)
@@ -136,10 +155,12 @@ def run_gui():
 
     # ADD-REMOVE Buttons
     button_width = 10
-    tk.Button(button_frame, text="Add Process", command=lambda: add_process(entry_pid, entry_arrival, entry_burst, entry_priority, listbox), bg="#4CAF50", fg="white", padx=10, pady=5, width = button_width).pack(side=tk.LEFT, padx=5)
-    tk.Button(button_frame, text="Remove Process", command=lambda: remove_process(listbox), bg="#f44336", fg="white", padx=10, pady=5, width = button_width).pack(side=tk.LEFT, padx=5)
+    tk.Button(button_frame, text="Add Process", command=lambda: add_process(entry_pid, entry_arrival, entry_burst, entry_priority, listbox,algo_label, algo_var), bg="#4CAF50", fg="white", padx=10, pady=5, width = button_width).pack(side=tk.LEFT, padx=5)
+    tk.Button(button_frame, text="Remove Process", command=lambda: remove_process(listbox,algo_label, algo_var), bg="#f44336", fg="white", padx=10, pady=5, width = button_width).pack(side=tk.LEFT, padx=5)
     # Run-Simulation Button
     tk.Button(root, text="Run Simulation", command=lambda: run_simulation(algo_var.get()), bg="#008CBA", fg="white", padx=10, pady=5, width = (button_width*2)+5).pack(pady=10)
+
+    root.mainloop()
     '''
     Previously in 1000 B.C.E (aka earlier commit)
     # Algorithm Selection
@@ -153,4 +174,3 @@ def run_gui():
     tk.Button(button_frame, text="Add Process", command=lambda: add_process(entry_pid, entry_arrival, entry_burst, entry_priority, listbox), bg="#4CAF50", fg="white", padx=10, pady=5).pack(side=tk.LEFT, padx=5)
     tk.Button(button_frame, text="Run Simulation", command=lambda: run_simulation(algo_var.get()), bg="#008CBA", fg="white", padx=10, pady=5).pack(side=tk.LEFT, padx=5)
     '''
-    root.mainloop()
