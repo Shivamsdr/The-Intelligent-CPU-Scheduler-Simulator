@@ -39,29 +39,22 @@ def draw_gantt_chart_p(processes):
 
 def calculate_metrics(processes):
     """Calculate and Print Performance Metrics"""
-    # total_waiting_time = sum(p['waiting_time'] for p in processes)
-    # total_turnaround_time = sum(p['turnaround_time'] for p in processes)
-    # total_completion_time = sum(p['completion_time'] for p in processes)
-    # avg_completion_time = total_completion_time / len(processes)
-    # avg_turnaround_time = total_turnaround_time / len(processes)
-    # avg_waiting_time = total_waiting_time / len(processes)
+    total_waiting_time = sum(p['waiting_time'] for p in processes)
+    total_turnaround_time = sum(p['turnaround_time'] for p in processes)
+    total_completion_time = sum(p['completion_time'] for p in processes)
+    avg_completion_time = total_completion_time / len(processes)
+    avg_turnaround_time = total_turnaround_time / len(processes)
+    avg_waiting_time = total_waiting_time / len(processes)
     # print(f"Average Completion Time: {avg_completion_time:.2f}")
     # print(f"Average Turnaround Time: {avg_turnaround_time:.2f}")
     # print(f"Average Waiting Time: {avg_waiting_time:.2f}")
-    for process in processes:
+    
+    for process in processes: #prints the porcess orders
         print(f"Process {process['id']}: Start Time = {process['start_time']}, "
             f"Completion Time = {process['completion_time']}, "
             f"Turnaround Time = {process['turnaround_time']}, "
             f"Waiting Time = {process['waiting_time']}")
-        total_completion_time += process['completion_time']
-        total_turnaround_time += process['turnaround_time']
-        total_waiting_time += process['waiting_time']
 
-    # Step 6: Calculate and print averages
-    n = len(processes)
-    avg_completion_time = total_completion_time / n
-    avg_turnaround_time = total_turnaround_time / n
-    avg_waiting_time = total_waiting_time / n
 
     print("\nAverage Completion Time:", avg_completion_time)
     print("Average Turnaround Time:", avg_turnaround_time)
