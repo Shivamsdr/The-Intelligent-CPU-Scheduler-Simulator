@@ -2,10 +2,11 @@ import tkinter as tk
 from tkinter import messagebox
 from algorithms import fcfs, sjf, round_robin, priority_scheduling, srtf
 from visualization import draw_gantt_chart, draw_gantt_chart_p, calculate_metrics
+
 from suggest_algorithm import suggest_algorithm
 process_list = []
 
-def add_process(entry_pid, entry_arrival, entry_burst, entry_priority, listbox, algo_label,algo_var):
+def add_process(entry_pid, entry_arrival, entry_burst, entry_priority, listbox, algo_label,algo_var,best_tt_label):
 #Add a process to the list
     try:
         pid = entry_pid.get().strip()
@@ -32,14 +33,36 @@ def add_process(entry_pid, entry_arrival, entry_burst, entry_priority, listbox, 
 
         #suggestion
         suggested_algo = suggest_algorithm(process_list)
-        algo_label.config(text=f"Suggested Algorithm: {suggested_algo}")
+        algo_label.config(text=f"heuritics_Suggestion: {suggested_algo}")
+        results = {
+            "FCFS": calculate_metrics(fcfs(process_list)),
+            "SJF": calculate_metrics(sjf(process_list)),
+            "SRTF": calculate_metrics(srtf(process_list)),
+            "Round Robin": calculate_metrics(round_robin(process_list, quantum=2)),
+            "Priority": calculate_metrics(priority_scheduling(process_list))
+        }
+        best_algo_tt = min(results, key=lambda algo: results[algo]['avg_turnaround_time'])
+        best_algo_wt = min(results, key=lambda algo: results[algo]['avg_waiting_time'])
+
+        #update labels
+        best_tt_label.config(text=f"BestTT-Algorithm: {best_algo_tt} && BestWT-Algorithm: {best_algo_wt}")
+        #best_wt_label.config(text=f"")
+
         # suggested algorithm in the dropdown
         algo_var.set(suggested_algo)
 
 
     except ValueError:
         messagebox.showerror("Invalid Input", "Please enter valid only numeric values for Arrival time, Burst time, and Priority.")
-
+def calculate_metrics(result): #for adding process usecase
+    #Calculate metrics for result.
+    total_turnaround_time = sum(p['turnaround_time'] for p in result)
+    total_waiting_time = sum(p['waiting_time'] for p in result)
+    n = len(result)
+    return {
+        'avg_turnaround_time': total_turnaround_time,
+        'avg_waiting_time': total_waiting_time
+    }
 def remove_process(listbox,algo_label,algo_var):
     #Remove the selected process from the list
     try:
@@ -56,7 +79,7 @@ def remove_process(listbox,algo_label,algo_var):
 
     except IndexError:
         messagebox.showerror("Selection Error", "Please select a process to remove.")
-
+        
 def run_simulation(selected_algo):
     #Run the selected scheduling algorithm
     if not process_list:
@@ -108,7 +131,7 @@ def run_gui():
     """Run the GUI"""
     root = tk.Tk()
     root.title("CPU Scheduler Simulator")
-    root.geometry("480x690") #adjusts width for vertical rectagle
+    root.geometry("480x750") #adjusts width for vertical rectagle
     root.configure(bg="#f0f0f0")
 
     # Title
@@ -136,14 +159,19 @@ def run_gui():
     add_placeholder(entry_priority, "optional")
 
     # Suggested Algorithm Label
-    algo_label = tk.Label(root, text="Suggested Algorithm: None", font=("MS Serif", 16), bg="#f0f0f0", fg="darkgreen")
+    algo_label = tk.Label(root, text="Suggested Algorithm: None", font=("MS Serif", 18, 'bold'), bg="#f0f0f0", fg="darkgreen")
     algo_label.pack(pady=10)
+    # BestWT-Algorithm Label
+    #best_wt_label = tk.Label(root, text="BestWT-Algorithm: None", font=("MS Serif", 14), bg="#f0f0f0", fg="darkgrey")
+    #best_wt_label.pack(pady=5)
 
     # Process List
     listbox = tk.Listbox(root, width=60, height=10, selectbackground="#cce7ff")
     listbox.pack(pady=10)
     listbox.insert(tk.END, f"  Process ID  Arrival  Burst  Priority  ")
-
+    # BestTT-Algorithm Label
+    best_tt_label = tk.Label(root, text="BestTT-Algorithm: None && BestWT-Algorithm: None", font=("MS Serif", 13, 'bold'), bg="#f0f0f0", fg="grey")
+    best_tt_label.pack(pady=5)
     # Algorithm Selection
     tk.Label(root, bg="#f0f0f0").pack()
     algo_var = tk.StringVar(value="Select Scheduling Algorithm:")
@@ -155,11 +183,11 @@ def run_gui():
 
     # ADD-REMOVE Buttons
     button_width = 10
-    tk.Button(button_frame, text="Add Process", command=lambda: add_process(entry_pid, entry_arrival, entry_burst, entry_priority, listbox,algo_label, algo_var), bg="#4CAF50", fg="white", padx=10, pady=5, width = button_width).pack(side=tk.LEFT, padx=5)
-    tk.Button(button_frame, text="Remove Process", command=lambda: remove_process(listbox,algo_label, algo_var), bg="#f44336", fg="white", padx=10, pady=5, width = button_width).pack(side=tk.LEFT, padx=5)
+    tk.Button(button_frame, text="Add Process", command=lambda: add_process(entry_pid, entry_arrival, entry_burst, entry_priority, listbox,algo_label, algo_var,best_tt_label), bg="#4CAF50", fg="white", padx=10, pady=5, width = button_width).pack(side=tk.LEFT, padx=5)
+    tk.Button(button_frame, text="Remove Process", command=lambda: remove_process(listbox,algo_label, algo_var,best_tt_label), bg="#f44336", fg="white", padx=10, pady=5, width = button_width).pack(side=tk.LEFT, padx=5)
     # Run-Simulation Button
     tk.Button(root, text="Run Simulation", command=lambda: run_simulation(algo_var.get()), bg="#008CBA", fg="white", padx=10, pady=5, width = (button_width*2)+5).pack(pady=10)
-
+    
     root.mainloop()
     '''
     Previously in 1000 B.C.E (aka earlier commit)
@@ -174,3 +202,4 @@ def run_gui():
     tk.Button(button_frame, text="Add Process", command=lambda: add_process(entry_pid, entry_arrival, entry_burst, entry_priority, listbox), bg="#4CAF50", fg="white", padx=10, pady=5).pack(side=tk.LEFT, padx=5)
     tk.Button(button_frame, text="Run Simulation", command=lambda: run_simulation(algo_var.get()), bg="#008CBA", fg="white", padx=10, pady=5).pack(side=tk.LEFT, padx=5)
     '''
+    
