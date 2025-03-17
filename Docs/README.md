@@ -65,6 +65,6 @@ python3 main.py
 ### Contributors
 **Shivam Yadav** https://github.com/Shivamsdr  
 **Om Singh Chauhan** https://github.com/OmSingh2005  
-**Aryan Kumar** https://github.com/AryanKumarLpu  
+**Aryan Kumar** https://github.com/Aryan114mehta
 
 Feel free to suggest improvements, report issues, or contribute to this project. If you have ideas for adding AI/ML-based, let’s collaborate
