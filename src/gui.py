@@ -63,7 +63,7 @@ def calculate_metrics(result): #for adding process usecase
         'avg_turnaround_time': total_turnaround_time,
         'avg_waiting_time': total_waiting_time
     }
-def remove_process(listbox,algo_label,algo_var):
+def remove_process(listbox,algo_label,algo_var,best_tt_label):
     #Remove the selected process from the list
     try:
         selected_index = listbox.curselection()[0]
