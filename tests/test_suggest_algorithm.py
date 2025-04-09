@@ -2,7 +2,7 @@ import sys
 import os
 import pandas as pd
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-from src.suggest_algorithm import suggest_algorithm
+from src.suggest2 import suggest_algorithm
 
 # data form excel
 file_path = r'C:\Users\oms1n\OneDrive\Desktop\CS\SamplePr.xlsx'
